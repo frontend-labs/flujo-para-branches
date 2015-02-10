@@ -1,21 +1,45 @@
 ```sequence
-participant Master
-participant Staging
-Development->Development: git pull origin development
-Development->type#number_summary (up to 80 characters): git checkout -b
-Note right of type#number_summary (up to 80 characters): Do your work
-Development->Development: git pull origin development
-Development-->type#number_summary (up to 80 characters): git rebase origin development
-Note right of type#number_summary (up to 80 characters): Upload to repository\n for Code Review
-type#number_summary (up to 80 characters)-->Development:If Code Review was declined.\n Fix the errors.
-Development->Development: git pull origin development
-Development-->type#number_summary (up to 80 characters): git rebase origin development
-type#number_summary (up to 80 characters)-->Staging: If Code Review was approved.\n Do Pull Request
-type#number_summary (up to 80 characters)-->Staging: git merge staging
-Staging->Staging: git pull origin staging
-Staging-->Development: git rebase origin development
-Staging-->Master: git merge staging
-Master->Master:git pull origin master
-Master-->Staging:git rebase origin master
+master->master: git branch staging origin/master
+master-->staging: git checkout staging
+staging->staging: git push -u origin staging
+staging->staging: git branch development origin/staging
+staging-->development: git checkout development
+development->development: git push -u origin development
+development->development: git pull
+development->development: git branch [type]_[issue_number]_summary origin/development
+development-->[type]_[issue_number]_summary: git checkout [type]_[issue_number]_summary
+Note right of [type]_[issue_number]_summary: Do your work
+[type]_[issue_number]_summary-->development: git checkout development
+development->development: git pull
+development-->[type]_[issue_number]_summary: git checkout [type]_[issue_number]_summary
+[type]_[issue_number]_summary->[type]_[issue_number]_summary: git rebase -i origin/development
+[type]_[issue_number]_summary->[type]_[issue_number]_summary: git push -u origin [type]_[issue_number]_summary
+Note right of [type]_[issue_number]_summary: Ready for Code Review
+Note left of [type]_[issue_number]_summary: If Code Review was  declined.\n Fix the errors.
+[type]_[issue_number]_summary-->development: git checkout development
+development->development: git pull
+development-->[type]_[issue_number]_summary: git checkout [type]_[issue_number]_summary
+[type]_[issue_number]_summary->[type]_[issue_number]_summary: git rebase -i origin/development
+[type]_[issue_number]_summary->[type]_[issue_number]_summary: git push origin +[type]_[issue_number]_summary
+Note left of [type]_[issue_number]_summary: If Code Review was approved.\n Do Pull Request
+[type]_[issue_number]_summary-->development: git checkout development
+development->development: git merge [type]_[issue_number]_summary
+development-->staging:git checkout staging
+staging->staging: git pull
+staging->staging: git merge development
+staging->staging: git push origin staging
+Note left of staging: Test Cases from QA
+staging-->master: git checkout master
+master->master: git pull
+master->master: git merge staging
+master->master: git push origin master
+master-->staging: git checkout staging
+staging->staging: git pull
+staging->staging: git rebase -i origin/master
+staging->staging: git push origin +staging
+staging-->development: git checkout development
+development->development: git pull
+development->development: git rebase -i origin/staging
+development->development: git push origin +development
 
 ```
