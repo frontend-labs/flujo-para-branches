@@ -41,5 +41,13 @@ staging-->development: git checkout development
 development->development: git pull
 development->development: git rebase -i origin/staging
 development->development: git push origin +development
-
 ```
+
+Image caption
+-------
+
+> **git branch [new_branch] [parent_branch]:** Create new branch based on parent branch.
+> **git push -u [branch]: ** Push your changes and set up the stream between the local and the remote branch.
+> **git pull: ** Combination of *git fetch*, which connects to the remote repository and fetches new commits, and *git merge* (or *git rebase*) which incorporates the new commits into your local branch. 
+> **git rebase -i [parent_branch]:** Update your current branch based on the parent branch, so the commits from the parent branch are placed first that the commits from the current branch. The ‘-i’ option enables the the [interactive mode](http://git-scm.com/docs/git-rebase#_interactive_mode) .
+> **git push origin +[branch]:** Force update to the remote branch with the local branch.
